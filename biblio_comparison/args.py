@@ -17,7 +17,7 @@ all_args['n_try'] = [0]
 # all_args['n_try'] = range(1, 11)
 
 all_args['experiment_name'] = [
-    "ICIP_2022/biblio/0"
+    "biblio"
 ]
 
 #########################

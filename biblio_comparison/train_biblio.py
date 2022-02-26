@@ -171,6 +171,5 @@ if __name__ == '__main__':
 
     code_saver.delete_temporary_file()
 
-
     log_console(f'{len(bugged)} Args Bugged: ', bugged, logger=console_logger)
     log_console(f'{len(all_args)} args done in {format_time(time() - start_all)} ', logger=console_logger)

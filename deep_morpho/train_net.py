@@ -13,10 +13,11 @@ from deep_morpho.datasets.multi_rect_dataset import InputOutputGeneratorDataset
 from deep_morpho.models import LightningBiMoNN
 import deep_morpho.observables as obs
 from general.nn.observables import CalculateAndLogMetrics
-from general.utils import format_time, log_console, create_logger, save_yaml
+from general.utils import format_time, log_console, create_logger, save_yaml, get_next_same_name
 from deep_morpho.metrics import masked_dice
 from deep_morpho.args import all_args
 from general.code_saver import CodeSaver
+from save_results.display_results import DisplayResults
 
 
 def get_dataloader(args):
@@ -175,6 +176,7 @@ if __name__ == '__main__':
     print(device)
     bugged = []
     results = []
+    all_tb_paths = []
 
     for args_idx, args in enumerate(all_args):
 
@@ -195,7 +197,9 @@ if __name__ == '__main__':
         log_console('Time since beginning: {} '.format(format_time(time() - start_all)), logger=console_logger)
         log_console(logger.log_dir, logger=console_logger)
         log_console(args['morp_operation'], logger.log_dir, logger=console_logger)
-        results.append(main(args, logger))
+        main(args, logger)
+
+        all_tb_paths.append(logger.log_dir)
         # try:
         #     main(args, logger)
         # except Exception:
@@ -204,6 +208,10 @@ if __name__ == '__main__':
         #     bugged.append(args_idx+1)
 
     code_saver.delete_temporary_file()
+
+
+    final_res_folder = get_next_same_name("results/exp")
+    html = DisplayResults().save(all_tb_paths, join(final_res_folder, "bimonn_results.html"), "bimonn_results")
 
     log_console(f'{len(bugged)} Args Bugged: ', bugged, logger=console_logger)
     log_console(f'{len(all_args)} args done in {format_time(time() - start_all)} ', logger=console_logger)

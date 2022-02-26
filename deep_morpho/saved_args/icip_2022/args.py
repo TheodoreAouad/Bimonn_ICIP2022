@@ -1,12 +1,10 @@
 import numpy as np
 import torch.nn as nn
 import torch.optim as optim
-import torchvision.transforms as transforms
 
-from deep_morpho.datasets.generate_forms3 import get_random_rotated_diskorect, get_random_diskorect_channels
+from deep_morpho.datasets.generate_forms3 import get_random_diskorect_channels
 from deep_morpho.loss import MaskedMSELoss, MaskedDiceLoss, MaskedBCELoss
 from general.utils import dict_cross
-# from general.nn.loss import DiceLoss
 from .args_morp_ops_mnist import morp_operations as morp_operations_mnist
 from .args_morp_ops_diskorect import morp_operations as morp_operations_diskorect
 
@@ -36,7 +34,6 @@ all_args['in_ram'] = [
     True,
 ]
 all_args['random_gen_fn'] = [
-    # get_random_rotated_diskorect,
     get_random_diskorect_channels
 ]
 all_args['random_gen_args'] = [
@@ -147,7 +144,7 @@ all_args_inverted_mnist = dict_cross(all_args)
 ###########
 
 all_args = (
-    # all_args_diskorect +
+    all_args_diskorect +
     all_args_mnist +
     all_args_inverted_mnist +
     []
@@ -158,7 +155,7 @@ for idx, args in enumerate(all_args):
 
     # args['kernel_size'] = 'adapt'
     args['n_atoms'] = 'adapt'
-    args['experiment_subname'] = f"{args['dataset_type']}/{args['morp_operation'].name}/{args['atomic_element']}"
+    args['experiment_subname'] = f"{args['dataset_type']}/{args['morp_operation'].name}"
 
 
     if args["kernel_size"] == "adapt":
